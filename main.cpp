@@ -8,12 +8,12 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <shaders/shader.h>
+#include <../../shaders/shader.h>
 #include "stb_image.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <camera/camera.h>
+#include <../../camera/camera.h>
 
 
 
@@ -26,6 +26,7 @@ float yaw = -90.0f;
 float pitch = 0.0f;
 bool firstMouse = true;
 Camera camera(glm::vec3(0.0f,0.0f,3.0f));
+glm::vec3 lightPos(1.2f,1.0f,2.0f);
 void setup_imgui(GLFWwindow* window);
 void processInput(GLFWwindow* window);
 void scroll_callback(GLFWwindow *window, double xoffset,double yoffset);
@@ -101,47 +102,47 @@ int main()
                      };
 
     float cubevert[]  = {
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 
 
 
@@ -150,6 +151,50 @@ int main()
 
 
         };
+
+    float lightvert[] = {
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f
+};
 
 
 
@@ -172,10 +217,11 @@ int main()
 
 
 
-    Shader ourShader("glcraft/shaders/vert.shad","glcraft/shaders/frag.shad");
-    Shader ourShader2("glcraft/shaders/vert2.shad","glcraft/shaders/frag2.shad");
+    Shader ourShader("glstest/glcraft/shaders/vert.shad","glstest/glcraft/shaders/frag.shad");
+    Shader ourShader2("glstest/glcraft/shaders/vert2.shad","glstest/glcraft/shaders/frag2.shad");
 
-
+    Shader lshader("glstest/glcraft/shaders/lightvert.shad","glstest/glcraft/shaders/lightfrag.shad");
+    Shader lsrcshader("glstest/glcraft/shaders/lightvert.shad","glstest/glcraft/shaders/lightsrcfrag.shad");
 
     unsigned int EBO;
     glGenBuffers(1,&EBO);
@@ -198,15 +244,15 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER,VBO2);
     glBufferData(GL_ARRAY_BUFFER,sizeof(vert2),vert2,GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8 * sizeof(float),(void*)0);
-    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE, 8 * sizeof(float),(void*)(3*sizeof(float)));
-    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,8 * sizeof(float),(void*)(6*sizeof(float)));
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,6 * sizeof(float),(void*)0);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE, 6 * sizeof(float),(void*)(3*sizeof(float)));
+    //glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,8 * sizeof(float),(void*)(6*sizeof(float)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),indices,GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
+    //glEnableVertexAttribArray(2);
     glBindVertexArray(0);
 
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
@@ -220,10 +266,24 @@ int main()
     glGenBuffers(1,&cubevbo);
     glBindBuffer(GL_ARRAY_BUFFER,cubevbo);
     glBufferData(GL_ARRAY_BUFFER,sizeof(cubevert),cubevert,GL_STATIC_DRAW);
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 5 * sizeof(float),(void*)0);
-    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE, 5 * sizeof(float),(void*)(3*sizeof(float)));
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 6 * sizeof(float),(void*)0);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE, 6 * sizeof(float),(void*)(3*sizeof(float)));
     glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(1);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+
+    unsigned int lightvao;
+    glGenVertexArrays(1,&lightvao);
+    glBindVertexArray(lightvao);
+    unsigned int lightvbo;
+    glGenBuffers(1,&lightvbo);
+    glBindBuffer(GL_ARRAY_BUFFER,lightvbo);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(lightvert),lightvert,GL_STATIC_DRAW);
+
+
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 3 * sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,0);
 
@@ -231,11 +291,9 @@ int main()
 
 
 
-
-
     int width,height, nrChannels;
 
-    unsigned char *data = stbi_load("glcraft/img/Quake1cover.jpg",&width,&height,&nrChannels,0);
+    unsigned char *data = stbi_load("glstest/glcraft/img/Quake1cover.jpg",&width,&height,&nrChannels,0);
 
     unsigned int texture;
     glGenTextures(1,&texture);
@@ -248,7 +306,7 @@ int main()
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
     stbi_set_flip_vertically_on_load(true);
-    data = stbi_load("glcraft/img/awesomeface.png",&width,&height,&nrChannels,0);
+    data = stbi_load("glstest/glcraft/img/awesomeface.png",&width,&height,&nrChannels,0);
     unsigned int texture2;
     glGenTextures(1,&texture2);
     glBindTexture(GL_TEXTURE_2D,texture2);
@@ -286,8 +344,9 @@ int main()
 
 
 
-
-
+    float objColor[3] = {1.0f, 0.5f, 0.31f};
+    float lColor [3] = {1.0f, 1.0f, 1.0f};
+    float rlen = glm::length(lightPos);
 
 
 
@@ -310,17 +369,20 @@ int main()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGui::ShowDemoWindow();
+
+
         /*ourShader.use();
+
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES,3,GL_UNSIGNED_INT,0); */
 
-        ourShader2.use();
-        float timeValue = glfwGetTime();
-        float dmov = (sin(timeValue) ) + 0.5f;
+        //ourShader2.use();
+       // float timeValue = glfwGetTime();
+       // float dmov = (sin(timeValue) ) + 0.5f;
        // int deltaLoc = glGetUniformLocation(ourShader2.ID,"delta");
         //glUniform1f(deltaLoc,dmov);
-        ourShader2.setFloat("delta",dmov);
+        //ourShader2.setFloat("delta",dmov);
 
         /*
 
@@ -330,10 +392,14 @@ int main()
          glUniform4f(vertexColorLocation,0.2f,0.2f,blueValue,1.0f);
          glUniform1f(deltaLoc,dmov);
          */
+         glm::mat4 view ;
+
+        view = camera.GetViewMatrix();
+        glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 trans = glm::mat4(1.0f);
-        float rotval =  2.0f * glfwGetTime();
+        float rotval =  0.5f * glfwGetTime();
         glm::mat4 projection;
-        projection = glm::perspective(glm::radians(45.0f),800.0f / 600.0f,0.1f,100.0f);
+        projection = glm::perspective(glm::radians(camera.Zoom),800.0f / 600.0f,0.1f,100.0f);
 
 
         /*glm::vec3 cameraZ = glm::normalize(glm::vec3(cameraPos - cameraTarget));
@@ -347,32 +413,60 @@ int main()
         view[3] = glm::vec4(cameraPos,1.0f);
         view = glm::inverse(view); */
 
-        glm::mat4 view ;
 
        /* const float radius = 10.0f;
         cameraPos = glm::vec3(sin(glfwGetTime()) * radius,0.0f,cos(glfwGetTime()) * radius );
         //cameraPos = glm::vec3(sin(glfwGetTime()) *  radius,0.0f,0.0f);
         view = glm::lookAt(cameraPos,cameraTarget,cameraUp);
         */
-        view = camera.GetViewMatrix();
+
+        lsrcshader.use();
+
+        glBindVertexArray(lightvao);
+
+        model = glm::mat4(1.0f);
+        lightPos = glm::vec3(rlen * (float)cos(rotval) , lightPos.y,rlen * (float)sin(rotval));
+        model = glm::translate(model,lightPos);
+        //model = glm::translate(model,lightPos);
+        model = glm::scale(model,glm::vec3(0.2f));
+        lsrcshader.setMat4("model",model);
+        lsrcshader.setMat4("view",view);
+        lsrcshader.setMat4("projection",projection);
+        lsrcshader.setVec3("lightPos",lightPos);
+        glDrawArrays(GL_TRIANGLES,0,36);
 
 
 
 
 
 
-        //model = glm::translate(model,glm::vec3(0.5* (float)sin(rotval) ,0.3* (float)cos(rotval),0.0f));
+
+lshader.use();
+model = glm::mat4(1.0f);
+        lshader.setMat4("model",model);
+        lshader.setMat4("view",view);
+        lshader.setMat4("projection",projection);
+        lshader.setVec3("objectColor", glm::vec3(objColor[0], objColor[1], objColor[2]));
+        lshader.setVec3("lightColor",  glm::vec3(lColor[0], lColor[1], lColor[2]));
+        lshader.setVec3("lightPos",lightPos);
+        lshader.setVec3("viewPos",camera.Position);
+        glBindVertexArray(cubevao);
+        glDrawArrays(GL_TRIANGLES,0,36);
 
 
 
 
 
 
-        unsigned int projLoc = glGetUniformLocation(ourShader2.ID,"projection");
+
+
+
+
+        /*unsigned int projLoc = glGetUniformLocation(ourShader2.ID,"projection");
         unsigned int viewLoc = glGetUniformLocation(ourShader2.ID,"view");
 
         glUniformMatrix4fv(projLoc,1,GL_FALSE,glm::value_ptr(projection));
-        glUniformMatrix4fv(viewLoc,1,GL_FALSE,glm::value_ptr(view));
+        glUniformMatrix4fv(viewLoc,1,GL_FALSE,glm::value_ptr(view)); */
 
 
 
@@ -382,14 +476,14 @@ int main()
         //glUniformMatrix4fv(transformLoc,1,GL_FALSE,glm::value_ptr(trans));
 
 
-
+        /*
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D,texture);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D,texture2);
-        glBindVertexArray(cubevao);
+        glBindVertexArray(cubevao); */
 
-        for(unsigned int i = 0; i < 10 ; i++) {
+       /* for(unsigned int i = 0; i < 10 ; i++) {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model,cubePositions[i]);
             float ang = 15.0f * i + 2.0f ;
@@ -399,10 +493,12 @@ int main()
             glDrawArrays(GL_TRIANGLES,0,36);
 
 
-        }
+        } */
 
         ImGui::Begin("IMGUI");
-        ImGui::Text("New Text");
+        ImGui::Text("Color Change");
+        ImGui::ColorEdit3("Cube Color",objColor);
+        ImGui::ColorEdit3("Light Color",lColor);
         ImGui::End();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
